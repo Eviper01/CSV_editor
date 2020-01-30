@@ -1,7 +1,7 @@
 import csv
 import pandas as pd
 #csve file.csv (startx,starty) (endx,endy) operation
-def load(df,file,header=None):
+def load(df=None,file='data.csv',header=None):
     #try:
         df =  pd.read_csv(file,header=header)
         print(df)
@@ -29,9 +29,28 @@ def saveas(df,file):
     df.to_csv(file,header=None,index=False)
     return df
 
+def peakrow(df,index):
+    print(df.loc[index])
+    return df
 
-df = None
+def peak(df,x,y):
+    print(df[x][y])
+    return df
+
+def poke(df,x,y,str):
+    df[x][y] = str
+    return df
+
+def search(df,str):
+    for col in df:
+        print(col,df[col].str.contains(str))
+    return df
+
+
 print("intialised")
 while True:
     action = input(">")
-    df = exec(action)
+    try:
+        exec(action)
+    except Exception as e:
+        print(e)
