@@ -1,49 +1,37 @@
-import sys
 import csv
 import pandas as pd
-#df[x] index a collum
-#df.loc[x] index a row
-#df[x][y] index a coor
 #csve file.csv (startx,starty) (endx,endy) operation
-def init_df():
-    try:
-        starty = sys.argv[2]
-        startx = sys.argv[3]#gonna need to reformat these
-        endy = sys.argv[4]
-        endx = sys.argv[5]
-        df =  pd.read_csv(sys.argv[1],header=None)
+def load(df,file,header=None):
+    #try:
+        df =  pd.read_csv(file,header=header)
         print(df)
-        df = df.loc[startx:endx,starty:endy]
         return df
-    except Exception as e:
-        print("Invalid CSV file or slices")
+    #except Exception as e:
+        print("Invalid CSV file")
+    #    print(e)
 
 
-def nothing(df):
+def slice(df,start,end):
+    df = df.loc[start[0]:end[0],start[1]:end[1]]
+    print(df)
     return df
 
 def sortbyrow(df):
     out = []
     for index, row in df.iterrows():
         group = list(row)
-        print(group)
         group.sort()
         out.append(group)
     return pd.DataFrame.from_records(out)
 
+def saveas(df,file):
+    print("saved")
+    df.to_csv(file,header=None,index=False)
+    return df
 
-dispatcher = {"nothing":nothing,
-            "sortbyrow":sortbyrow
-            }
 
-df = init_df()
-print("reading in:")
-print(df.to_string())
-print("formated to:")
-#try:
-out_df = dispatcher[sys.argv[6]](df)
-print(out_df)
-print("saved to: out.csv")
-out_df.to_csv("out.csv")
-#except:
-#    print("Invalid operation or error during operation")
+df = None
+print("intialised")
+while True:
+    action = input(">")
+    df = exec(action)
